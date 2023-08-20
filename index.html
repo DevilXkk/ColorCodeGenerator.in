@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Color Picker with Live Wallpaper</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background 0.5s ease;
+            background-image: url('background.jpg');
+            /* Default background image */
+            background-size: cover;
+        }
+        #colorPicker {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        #colorInput {
+            margin-top: 20px;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+        #colorInput:hover, #colorInput:focus {
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #colorBox {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+        #colorCode {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #666;
+        }
+        #appFooter {
+            margin-top: 30px;
+            color: #fff;
+            font-family: 'Roboto Condensed', sans-serif;
+            letter-spacing: -1px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 5);
+        }
+
+    </style>
+</head>
+<body>
+    <div id="colorPicker">
+        <h1>Color Picker with Live Wallpaper</h1>
+        <input type="color" id="colorInput">
+        <div id="colorBox"></div>
+        <p id="colorCode">
+            #000000
+        </p>
+        <p id="appFooter">
+            Created by KUNAL
+        </p>
+    </div>
+
+    <script>
+        var colorInput = document.getElementById('colorInput');
+        var colorBox = document.getElementById('colorBox');
+        var colorCode = document.getElementById('colorCode');
+        var body = document.body;
+
+        // Retrieve the color from local storage on page load
+        var storedColor = localStorage.getItem('selectedColor');
+        if (storedColor) {
+            colorInput.value = storedColor;
+            colorBox.style.backgroundColor = storedColor;
+            colorCode.textContent = storedColor.toUpperCase();
+            setLiveWallpaper(storedColor);
+        }
+
+        colorInput.addEventListener('input', function() {
+            var selectedColor = colorInput.value;
+            colorBox.style.backgroundColor = selectedColor;
+            colorCode.textContent = selectedColor.toUpperCase();
+            setLiveWallpaper(selectedColor);
+
+            // Store the selected color in local storage
+            localStorage.setItem('selectedColor', selectedColor);
+        });
+
+        function setLiveWallpaper(color) {
+            var canvas = document.createElement('canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            var dataURL = canvas.toDataURL();
+            body.style.backgroundImage = `url(${dataURL})`;
+        }
+    </script>
+</body>
+</html>
